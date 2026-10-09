@@ -1,0 +1,6 @@
+~$*.xlsx
+*_Master.xlsx
+*_Backup*.xlsx
+Thumbs.db
+.DS_Store
+REVIEW.md
