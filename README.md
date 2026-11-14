@@ -82,7 +82,7 @@ Sections 1–3 share one slicer selection — Country = United States, Schedule 
 
 ### 1. Career Overview
 
-The Career Overview PivotTable compares careers on Job Count, Median Salary, Remote Job %, Health Insurance %, No Degree Mentioned %, and Salary Coverage %.
+The Career Overview PivotTable compares careers on Job Count, Median Salary, Remote Job %, Health Insurance %, No Degree Mentioned %, and Yearly Salary %.
 
 ![Career Overview PivotTable](05-pivottable-career-overview.png)
 
@@ -262,7 +262,7 @@ Each share measure is formatted as a percentage with one decimal place:
 #### Salary coverage
 
 ```DAX
-Salary Coverage % :=
+Yearly Salary % :=
 DIVIDE(
     COUNT(Jobs[salary_year_avg]),
     [Job Count],
@@ -273,7 +273,7 @@ Jobs With Salary :=
 CALCULATE([Job Count], NOT(ISBLANK(Jobs[salary_year_avg])))
 ```
 
-`Salary Coverage %` sizes the salary caveat: the share of postings in the current filter context that list a *yearly* salary. Because every row in this subset discloses some salary, the remainder are hourly-paid postings, not postings without pay information. It counts the yearly-salary column directly, and it is the only coverage figure shown in the Career Overview PivotTable. `Jobs With Salary` is a supporting count of the same postings — **14,972** in the headline scope — and is not displayed there.
+`Yearly Salary %` sizes the salary caveat: the share of postings in the current filter context that list a *yearly* salary. Because every row in this subset discloses some salary, the remainder are hourly-paid postings, not postings without pay information. It counts the yearly-salary column directly, and it is the only coverage figure shown in the Career Overview PivotTable. `Jobs With Salary` is a supporting count of the same postings — **14,972** in the headline scope — and is not displayed there.
 
 #### Skill measures
 
