@@ -58,6 +58,8 @@ Row 7 uses the Top Skills scope — Business Analyst, full-time, United States, 
 
 The original public dataset contains approximately 786,000 job postings. This Excel project uses a 32,672-row subset provided for the course project. The difference reflects the scope of the project source rather than rows removed through Power Query cleaning.
 
+**Every row in this subset discloses a salary:** 22,036 postings list a yearly salary and 10,636 list an hourly one; none lists neither. So the workbook describes postings that disclose pay, not all Data Analyst, Data Scientist, etc. postings. Job counts, remote share, degree-mention share and insurance-mention share are all measured within this salary-disclosing group.
+
 All salary figures are annual averages in USD and reflect the 2023 market. Figures quoted throughout this README are the headline scope — United States, full-time — unless stated otherwise; the workbook's slicers reach the rest.
 
 Screenshots use a regional number format: `5.849` means 5,849, `$90.000` means $90,000, and `16,1%` means 16.1%.
@@ -70,7 +72,7 @@ Screenshots use a regional number format: `5.849` means 5,849, `$90.000` means $
 - **Not supported:** Excel for Mac and Excel for the web, which cannot edit the Power Pivot Data Model
 - Enable the Power Pivot add-in: *File → Options → Add-ins → COM Add-ins → Microsoft Power Pivot for Excel*
 
-The PivotTables, PivotCharts, and slicers work from the data already stored in the workbook. Refreshing is different: the Power Query queries load from the course's source workbook, which is not included in this repository, so **Refresh** will fail unless that file is available at its original path.
+The PivotTables, PivotCharts, and slicers work from the data already stored in the workbook. Refreshing is different: the Power Query queries load from the course's source workbook, which is not included in this repository, so **Refresh** will fail unless that file is available at its original path. To refresh with your own copy, go to *Data → Get Data → Data Source Settings → Change Source* and point the queries to it.
 
 ---
 
@@ -271,7 +273,7 @@ Jobs With Salary :=
 CALCULATE([Job Count], NOT(ISBLANK(Jobs[salary_year_avg])))
 ```
 
-`Salary Coverage %` sizes the salary caveat: the share of postings in the current filter context that disclose an annual salary. It counts the salary column directly, and it is the only coverage figure shown in the Career Overview PivotTable. `Jobs With Salary` is a supporting count of the same postings — **14,972** in the headline scope — and is not displayed there.
+`Salary Coverage %` sizes the salary caveat: the share of postings in the current filter context that list a *yearly* salary. Because every row in this subset discloses some salary, the remainder are hourly-paid postings, not postings without pay information. It counts the yearly-salary column directly, and it is the only coverage figure shown in the Career Overview PivotTable. `Jobs With Salary` is a supporting count of the same postings — **14,972** in the headline scope — and is not displayed there.
 
 #### Skill measures
 
@@ -312,7 +314,7 @@ Career Accessibility Insights
 ## Caveats
 
 - **Scope.** All headline figures are United States, full-time postings — **18,589** of them. Other countries and schedule types are in the workbook and reachable through the slicers, but the numbers quoted in this README are not global.
-- **Salary coverage.** Median salary is computed only from postings that disclose a salary. Within the headline scope of **18,589** United States full-time postings, **80.5%** (**14,972**) contain annual salary data. This figure applies only to the selected headline scope and should not be interpreted as the salary disclosure rate of either the full 32,672-row project subset or the approximately 786,000-row upstream dataset. Coverage is also uneven by career — from **69.6%** for Cloud Engineer to **95.3%** for Machine Learning Engineer — so cross-career salary comparisons rest on slightly different foundations. Postings without a salary are retained so that demand, remote-work, degree-mention, and insurance-mention metrics are not biased toward salary-disclosed postings.
+- **Salary coverage.** Median salary is computed only from postings that list a *yearly* salary. Within the headline scope of **18,589** United States full-time postings, **80.5%** (**14,972**) list one; the other **3,617** list an hourly rate only and are left out of the medians. This matters most for Data Analyst, where **29.4%** of the headline-scope postings are hourly-only: if hourly rates were converted at 2,080 hours a year (my assumption, not a source figure), the Data Analyst median would be about **$84,157** instead of **$90,000**, below Business Analyst at about **$87,978**. Treat the Data Analyst vs Business Analyst tie at $90,000 with that in mind. This figure applies only to the selected headline scope and should not be interpreted as the salary disclosure rate of either the full 32,672-row project subset or the approximately 786,000-row upstream dataset. Coverage is also uneven by career — from **69.6%** for Cloud Engineer to **95.3%** for Machine Learning Engineer — so cross-career salary comparisons rest on slightly different foundations. The workbook contains only salary-disclosing postings (see **Data** above), so demand, remote-work, degree-mention, and insurance-mention metrics describe that group and may differ from the full job market (in the full dataset used in my SQL project, only 2.8% of Data Analyst postings list a yearly salary).
 - **Small samples.** Cloud Engineer (**23** postings), Machine Learning Engineer (**128**), and Software Engineer (**171**) carry far less weight than Data Analyst (**5,849**) or Data Scientist (**5,103**). Percentages for the small three can move several points on a handful of postings and should not be read as precise.
 - **Career labels come from the source.** `job_title_short` is the dataset's own grouping of free-text titles, and it is approximate on seniority: the Jobs query preview shows "Sr. Data Engineer (remote)" labeled **Data Engineer**, not Senior Data Engineer. Senior versus non-senior comparisons should be read with that in mind.
 - **The Work From Home slicer is not connected to the PivotTable behind Remote Job Share.** Filtering to remote-only postings would force that ratio toward 100% and remove the comparison the chart exists to make.
